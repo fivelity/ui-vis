@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
-import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, Check, AlertCircle, ImageIcon, FileText, BrainCircuit } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Check, AlertCircle, ImageIcon, FileText, BrainCircuit, Zap, ArrowRight, TextIcon, Cog, RotateCw, CheckCircle } from 'lucide-react';
 import { DesignInput, AIModelConfig, AIProcessingResult } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { MotionSection, StaggerItem } from '@/components/animation/MotionSection';
 import { ImmersiveCard } from '@/components/3d/ImmersiveCard';
+import { getModelDisplayName } from '@/lib/ai/utils';
+import { useUIStore } from '@/lib/store';
 
 interface AnalysisStepProps {
   input: DesignInput | null;
@@ -25,6 +27,16 @@ export function AnalysisStep({
   progress,
   isProcessing
 }: AnalysisStepProps) {
+  const isReducedMotion = useUIStore(state => state.isReducedMotion);
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const hasImage = input?.type === 'image';
+  const hasText = input?.type === 'text';
+  
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+  
   // Map of element types to confidence levels (for visualization)
   const confidenceLevels = analysis?.confidence || {
     'layout': 0.92,
@@ -112,9 +124,9 @@ export function AnalysisStep({
               <div>
                 <p className="text-sm font-medium">{config?.provider || 'AI Provider'}</p>
                 <p className="text-xs text-muted-foreground">
-                  Model: {config?.model || 'Not selected'} • 
-                  Creativity: {config ? Math.round(config.creativity * 100) : 0}% •  
-                  Complexity: {config ? Math.round(config.complexity * 100) : 0}%
+                  Model: {getModelDisplayName(config?.provider || '', config?.model || '') || 'Not selected'} • 
+                  Temperature: {config?.temperature ? config.temperature.toFixed(1) : '0.7'} • 
+                  Max Tokens: {config?.maxTokens || '4000'}
                 </p>
               </div>
             </CardContent>

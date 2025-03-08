@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, ChevronDown, Settings, Info } from "lucide-react";
 import { AIModelConfig } from "@/lib/types";
+import { PROVIDER_MODELS } from "@/lib/ai/models";
 
 interface ProviderOption {
   id: string;
@@ -13,29 +14,30 @@ interface ProviderOption {
   icon?: React.ReactNode;
 }
 
+// Use the centralized model definitions from models.ts
 const providers: ProviderOption[] = [
   {
     id: "openai",
     name: "OpenAI",
-    models: ["gpt-4o", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"],
+    models: PROVIDER_MODELS.openai,
     description: "Powerful vision models for detailed UI analysis and generation",
   },
   {
     id: "togetherai",
     name: "Together AI",
-    models: ["llama-3-70b-instruct", "llama-3-8b-instruct", "mistral-7b-instruct"],
+    models: PROVIDER_MODELS.togetherai,
     description: "Cost-effective open models with solid performance",
   },
   {
     id: "lmstudio",
     name: "LM Studio",
-    models: ["local-model"],
+    models: PROVIDER_MODELS.lmstudio,
     description: "Run models locally with customizable settings",
   },
   {
     id: "ollama",
     name: "Ollama",
-    models: ["llama3", "llama2", "mistral"],
+    models: PROVIDER_MODELS.ollama,
     description: "Local execution of various open-source models",
   },
 ];

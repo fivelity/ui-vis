@@ -5,6 +5,7 @@
 
 import { AIModelConfig, AIProcessingResult, DesignInput, GeneratedFile } from '../types';
 import { initializeProvider } from './providers';
+import { getNormalizedModelName } from './models';
 import { v4 as uuidv4 } from "uuid";
 import {
   imageToBase64,
@@ -152,8 +153,9 @@ export async function analyzeDesign(
       }
       case "togetherai": {
         const togetherAI = provider;
+        const normalizedModel = getNormalizedModelName(modelConfig.provider, modelConfig.model);
         const response = await togetherAI.chat.completions.create({
-          model: modelConfig.model,
+          model: normalizedModel,
           messages,
           temperature: modelConfig.temperature || optimizedParams.temperature,
           max_tokens: modelConfig.maxTokens || optimizedParams.max_tokens,
@@ -317,8 +319,9 @@ export async function generateProjectFiles(
       }
       case "togetherai": {
         const togetherAI = provider;
+        const normalizedModel = getNormalizedModelName(modelConfig.provider, modelConfig.model);
         const response = await togetherAI.chat.completions.create({
-          model: modelConfig.model,
+          model: normalizedModel,
           messages,
           temperature: modelConfig.temperature || optimizedParams.temperature,
           max_tokens: modelConfig.maxTokens || optimizedParams.max_tokens,

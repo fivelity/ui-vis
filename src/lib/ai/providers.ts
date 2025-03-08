@@ -54,9 +54,11 @@ export const initializeTogetherAI = (config: AIModelConfig) => {
     // Validate API key with improved error handling
     validateApiCredentials('TogetherAI', apiKey);
     
-    // Create client with authentication
+    // Create client with authentication using OpenAI compatibility layer
+    // This follows TogetherAI's recommended approach with Vercel AI SDK
     const togetherAI = createTogetherAI({
       apiKey,
+      baseURL: "https://api.together.xyz/v1",
     });
     
     return togetherAI;

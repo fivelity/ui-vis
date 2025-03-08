@@ -116,6 +116,44 @@ export const getMaxTokenContext = (provider: string, model: string): number => {
 };
 
 /**
+ * Get user-friendly display name for a model
+ * @param provider - The AI provider
+ * @param model - The model name (may be in internal format)
+ * @returns User-friendly display name
+ */
+export const getModelDisplayName = (provider: string, model: string): string => {
+  // For TogetherAI, format full model paths to be more readable
+  if (provider.toLowerCase() === 'togetherai') {
+    // Extract model name from path format (e.g., "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo")
+    if (model.includes('/')) {
+      const parts = model.split('/');
+      const modelName = parts[1] || model;
+      return modelName.replace(/-/g, ' ');
+    }
+  }
+  
+  // For other providers, create user-friendly model names
+  const displayNames: Record<string, string> = {
+    'gpt-4o': 'GPT-4o',
+    'gpt-4o-mini': 'GPT-4o Mini',
+    'gpt-4-turbo': 'GPT-4 Turbo',
+    'gpt-4-vision-preview': 'GPT-4 Vision',
+    'gpt-3.5-turbo': 'GPT-3.5 Turbo',
+    'gpt-3.5-turbo-16k': 'GPT-3.5 Turbo (16k)',
+    'llama3:8b': 'Llama 3 (8B)',
+    'llama3:latest': 'Llama 3 (Latest)',
+    'llama2:7b': 'Llama 2 (7B)',
+    'mistral:7b': 'Mistral (7B)',
+    'mixtral:8x7b': 'Mixtral (8x7B)',
+    'gemma:7b': 'Gemma (7B)',
+    'phi3:latest': 'Phi-3 (Latest)',
+    'local-model': 'Local Model'
+  };
+  
+  return displayNames[model] || model;
+};
+
+/**
  * Creates a structured prompt for analyzing UI design
  * @param imageDescription - Optional text description of the UI design
  * @returns Structured prompt for the AI model

@@ -14,12 +14,14 @@ import {
   FileCss as FileStyleIcon, 
   FileJs 
 } from 'lucide-react';
-import { AIProcessingResult } from '@/lib/types';
+import { AIModelConfig, AIProcessingResult } from '@/lib/types';
 import { MotionSection, StaggerItem } from '@/components/animation/MotionSection';
 import { useUIStore } from '@/lib/store';
+import { getModelDisplayName } from '@/lib/ai/utils';
 
 interface GenerationStepProps {
   analysis: AIProcessingResult | null;
+  config: AIModelConfig | null;
   progress: number;
   isProcessing: boolean;
   generatedFiles: any[];
@@ -27,6 +29,7 @@ interface GenerationStepProps {
 
 export function GenerationStep({
   analysis,
+  config,
   progress,
   isProcessing,
   generatedFiles
@@ -140,6 +143,44 @@ export function GenerationStep({
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </StaggerItem>
+            
+            <StaggerItem>
+              <div className="space-y-3 my-8">
+                <div className="flex flex-col md:flex-row justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    {/* Provider info */}
+                    <Card className="overflow-hidden w-full sm:w-auto">
+                      <CardContent className="p-3 flex items-center gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <FileCode className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{config?.provider || 'AI Provider'}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {config ? getModelDisplayName(config.provider, config.model) : 'Not selected'}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* File count */}
+                    <Card className="overflow-hidden w-full sm:w-auto">
+                      <CardContent className="p-3 flex items-center gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <FileJson className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Files Generated</p>
+                          <p className="text-xs text-muted-foreground">
+                            {generatedFiles.length || 0} files • {isProcessing ? 'in progress' : 'complete'}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
             </StaggerItem>

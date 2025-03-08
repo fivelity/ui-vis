@@ -250,6 +250,7 @@ export function GenerationWizard({ onComplete, className }: GenerationWizardProp
         return (
           <GenerationStep 
             analysis={currentAnalysis}
+            config={currentConfig}
             progress={generationProgress}
             isProcessing={isProcessing}
             generatedFiles={generatedFiles}
